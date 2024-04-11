@@ -1,8 +1,8 @@
-@model List<Domain.Entitys.Author>
+@model List<Domain.Entitys.Book>
 
-<div class="authorsList">
+<div class="booksList">
 @foreach(var item in @Model)
 {
-    await Html.RenderPartialAsync("authorComponent", item);
+    await Html.RenderPartialAsync("bookComponent", item);
 }
 </div>

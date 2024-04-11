@@ -1,2 +1,18 @@
-@model TModel
+@model Domain.Entitys.Author
 
+<div class="AuthorList--element">
+    <div class="AuthorList--element--name">
+        <span >
+            @Model.Name.FirstName
+        </span>
+        <span class="secondName">
+            @Model.Name.SecondName
+        </span>
+        <span>
+            @Model.Name.LastName
+        </span>
+    </div>
+    <div class="AuthorList--element--dateOfBirth">
+        @Model.YearOfBirth
+    </div>
+</div>

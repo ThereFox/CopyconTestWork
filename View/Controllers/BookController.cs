@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace BookTest.Controllers;
 
-public class BookController
+public class BookController : Controller
 {
     
 }
