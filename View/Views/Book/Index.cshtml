@@ -1,0 +1,8 @@
+@model List<Domain.Entitys.Author>
+
+<div class="authorsList">
+@foreach(var item in @Model)
+{
+    await Html.RenderPartialAsync("authorComponent", item);
+}
+</div>
