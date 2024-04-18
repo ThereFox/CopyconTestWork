@@ -1,0 +1,40 @@
+@inject App.Services.AuthorsServices _authors
+
+<div class="BooksList--element CreatePreview show">
+    <div class="BooksList--element creating" >
+        <div class="BooksList--element--name">
+            <label for="bookName"> Book name</label>
+            <input name="bookName" class="valueIndicator"/>
+        </div>
+        <div class="BooksList--element--dateOfWrite">
+            <label for="yearOfWrite">yearOfWrite</label>
+            <input type="number" max="@DateTime.Now.Year" name="yearOfWrite" class="valueIndicator"/>
+        </div>
+        <div class="BooksList--element--authorSelect">
+            <label for="author">Writer</label>
+            <select name="author" class="valueIndicator">
+                <option hidden disabled selected value="-1"> -- select an option -- </option>
+                @foreach (var authour in await _authors.GetAll())
+                {
+                    <option value="@authour.Id">@authour.Name.FirstName "@authour.Name.SecondName" @authour.Name.LastName (@authour.YearOfBirth)</option>
+                }
+                <option value="new">New authour</option>
+            </select>
+        </div>
+        <div class="BooksList--element--language">
+            <label for="language">Language</label>
+            <select name="language" class="valueIndicator">
+                <option value="1">Russian</option>
+                <option value="2">English</option>
+                <option value="3">French</option>
+            </select>
+        </div>
+            <div class="BooksList--element--creating--confirm">
+                <button class="OK">OK</button>
+                <button class="Clear">Clear</button>
+            </div>
+        </div>
+    <div class="BooksList--element preview">
+        <span>+</span>
+    </div>
+</div>

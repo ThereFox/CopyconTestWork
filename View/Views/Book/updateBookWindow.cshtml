@@ -1,0 +1,39 @@
+@inject App.Services.AuthorsServices _authours
+
+<div class="hide window UpdateBookWindow">
+    <div class="UpdateBookWindow--createForm">
+        <div class="UpdateBookWindow--createForm--elements">
+            <div class="UpdateBookWindow--createForm--elements__name">
+                <label for="bookName"> Book name</label>
+                <input name="bookName" class="valueIndicator"/>
+            </div>
+            <div class="UpdateBookWindow--createForm--elements__dateOfWrite">
+                <label for="yearOfWrite">yearOfWrite</label>
+                <input type="number" max="@DateTime.Now.Year" name="yearOfWrite" class="valueIndicator"/>
+            </div>
+            <div class="UpdateBookWindow--createForm--elements__authorSelect">
+                <label for="author">Writer</label>
+                <select name="author" class="valueIndicator">
+                    <option hidden disabled selected value="-1"> -- select an option -- </option>
+                    @foreach (var authour in await _authours.GetAll())
+                    {
+                        <option value="@authour.Id">@authour.Name.FirstName "@authour.Name.SecondName" @authour.Name.LastName (@authour.YearOfBirth)</option>
+                    }
+                    <option value="new">New authour</option>
+                </select>
+            </div>
+            <div class="UpdateBookWindow--createForm--elements__language">
+                <label for="language">Language</label>
+                <select name="language" class="valueIndicator">
+                    <option value="1">Russian</option>
+                    <option value="2">English</option>
+                    <option value="3">French</option>
+                </select>
+            </div>
+        </div>
+        <div class="UpdateBookWindow--createForm--confirm">
+            <button class="OK">OK</button>
+            <button class="Cancel">Cancel</button>
+        </div>
+    </div>
+</div>

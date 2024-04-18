@@ -18,6 +18,11 @@ public class AuthorsServices
         return await _store.GetAll();
     }
 
+    public async Task<Result<Author>> GetById(Guid id)
+    {
+        return await _store.GetById(id);
+    }
+    
     public async Task<Result> Create(Author Author)
     {
         return await _store.Create(Author);
@@ -44,6 +49,6 @@ public class AuthorsServices
             return Result.Failure("dont have base element");
         }
         
-        return await _store.Delite(Id);
+        return await _store.Delite(checkContainingAuthorResult.Value);
     }
 }

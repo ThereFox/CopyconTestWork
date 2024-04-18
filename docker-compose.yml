@@ -1,0 +1,23 @@
+﻿services:
+  booktest:
+    image: app # локальный образ
+    build:
+      context: .
+      dockerfile: ./View/Dockerfile
+    environment: # Объявление переменных окружения
+      ASPNETCORE_HTTP_PORTS: 5000
+      #ASPNETCORE_HTTPS_PORTS: 5001
+    ports: #связь внутреннего и внешнего порта
+      - "5000:5000"
+      - "5001:5001"
+  app.database:
+    image: postgres:latest # образ с докер хаба
+    container_name: App.database
+    environment: # установка переменных по умолчанию
+      POSTGRES_DB: Books
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    #volumes: # связь пути на диске с путём на машине
+    #  - ./...:/...
+    ports:
+      - 5432:5432

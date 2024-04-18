@@ -1,3 +1,5 @@
+using App.RepositorysInterfaces;
+using DAL.Repositorys;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +11,9 @@ public static class DI
     {
         services.AddDbContext<BasicDataBaseContext>(DBconfiguration, ServiceLifetime.Singleton);
 
+        services.AddSingleton<IAuthorStore, AuthorStore>();
+        services.AddSingleton<IBookStore, BookStore>();
+        
         return services;
     }
 }

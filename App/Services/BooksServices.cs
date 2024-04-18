@@ -17,6 +17,11 @@ public class BooksServices
     {
         return await _store.GetAll();
     }
+    
+    public async Task<Result<Book>> GetById(Guid id)
+    {
+        return await _store.GetById(id);
+    }
 
     public async Task<Result> Create(Book Book)
     {
@@ -35,15 +40,8 @@ public class BooksServices
         return await _store.SaveChanges(Book);
     }
 
-    public async Task<Result> Delite(Guid Id)
+    public async Task<Result> Delite(Book book)
     {
-        var checkContainingBookResult = await _store.GetById(Id);
-        
-        if (checkContainingBookResult.IsFailure)
-        {
-            return Result.Failure("dont have base element");
-        }
-        
-        return await _store.Delite(Id);
+        return await _store.Delite(book);
     }
 }

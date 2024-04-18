@@ -5,20 +5,39 @@ namespace Domain.Entitys;
 
 public class Author : Entity<Guid>
 {
-    private List<Book> _writedBooks; 
-    
     public AuthorName Name { get; private set; }
     public int YearOfBirth { get; private set; }
 
-    public IReadOnlyCollection<Book> WritedBooks => _writedBooks;
+    public Result ChangeYearOfBirth(int newYearOfBirth)
+    {
+        if (newYearOfBirth >= DateTime.Today.Year)
+        {
+            return Result.Failure("author old must be more 0");
+        }
 
-    public Author(Guid id, AuthorName name, int yearOfBirth)
+        YearOfBirth = newYearOfBirth;
+        return Result.Success();
+    }
+    public Result ChangeName(AuthorName name)
+    {
+        if (Name == name)
+        {
+            return Result.Failure("nothing to change");
+        }
+
+        Name = name;
+        return Result.Success();
+    }
+
+
+    protected Author(Guid id, AuthorName name, int yearOfBirth)
     {
         Id = id;
         Name = name;
         YearOfBirth = yearOfBirth;
     }
-
+    
+    
     public static Result<Author> Create(Guid id, AuthorName name, int yearOfBirth)
     {
         if (yearOfBirth >= DateTime.Today.Year)

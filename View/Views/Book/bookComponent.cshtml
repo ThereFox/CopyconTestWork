@@ -1,16 +1,21 @@
+@using BookTest.Enums
 @model Domain.Entitys.Book
 
-<div class="booksList--element">
-    <div class="booksList--element--name">
+<div class="BooksList--element getted" id="@Model.Id">
+    <div class="BooksList--element--name">
         @Model.Name
     </div>
-    <div class="booksList--element--year">
-        @Model.Year
+    <div class="BooksList--element--year" data-year="@Model.Year" >
+        @Model.Year year
     </div>
-    <div class="booksList--element--language">
-        @Model.OriginalLanguage.Name
+    <div class="BooksList--element--language" data-languageId="@Model.OriginalLanguage.Id">
+        @((LanguageEnum)Model.OriginalLanguage.Id) lang
     </div>
-    <div class="AuthorList--element--Author">
-        @Model
+    <div class="BooksList--element--Author" data-authourId ="@Model.Author.Id">
+        Writer : @Model.Author.Name.FirstName - @Model.Author.Name.SecondName - @Model.Author.Name.LastName : @Model.Author.YearOfBirth
+    </div>
+    <div class="BooksList--element--controlls">
+        <button class="deliteButton">Delite</button>
+        <button class="updateButton">Update</button>
     </div>
 </div>

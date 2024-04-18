@@ -4,31 +4,32 @@ namespace Domain.ValueObject;
 
 public class Language : CSharpFunctionalExtensions.ValueObject
 {
-    public static Language Russian => new Language(nameof(Russian));
-    public static Language English => new Language(nameof(English));
-    public static Language French => new Language(nameof(French));
+    public static Language Russian => new Language(1);
+    public static Language English => new Language(2);
+    public static Language French => new Language(3);
 
     protected static List<Language> _all = [Russian, English, French];
     
-    public string Name { get; }
+    public int Id { get; }
     
-    protected Language(string name)
+    protected Language(int id)
     {
-        Name = name;
+        Id = id;
     }
+    private Language(){}
 
-    public static Result<Language> Create(string name)
+    public static Result<Language> Create(int id)
     {
-        if (_all.Any(ex => ex.Name == name) == false)
+        if (_all.Any(ex => ex.Id == id) == false)
         {
-            return Result.Failure<Language>("Invalid language name");
+            return Result.Failure<Language>("Invalid language id");
         }
 
-        return Result.Success<Language>(new Language(name));
+        return Result.Success<Language>(new Language(id));
     }
     
     protected override IEnumerable<IComparable> GetEqualityComponents()
     {
-        yield return Name;
+        yield return Id;
     }
 }

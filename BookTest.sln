@@ -1,7 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "View\View.csproj", "{FFC0D10D-C053-4D2A-B325-E2243BD4C1EE}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D915EBAA-8512-4D17-A423-97A390DD5764}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
@@ -13,16 +11,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App", "App\App.csproj", "{3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{D8E76BF3-674B-444F-B738-7AB690FEFB15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "View", "View\View.csproj", "{261266A1-86E4-4D35-83BC-00A65691A957}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FFC0D10D-C053-4D2A-B325-E2243BD4C1EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFC0D10D-C053-4D2A-B325-E2243BD4C1EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFC0D10D-C053-4D2A-B325-E2243BD4C1EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFC0D10D-C053-4D2A-B325-E2243BD4C1EE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5BF2A748-16F7-4A47-A01B-32C0153FF51A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5BF2A748-16F7-4A47-A01B-32C0153FF51A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BF2A748-16F7-4A47-A01B-32C0153FF51A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -35,5 +31,9 @@ Global
 		{D8E76BF3-674B-444F-B738-7AB690FEFB15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D8E76BF3-674B-444F-B738-7AB690FEFB15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8E76BF3-674B-444F-B738-7AB690FEFB15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{261266A1-86E4-4D35-83BC-00A65691A957}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{261266A1-86E4-4D35-83BC-00A65691A957}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{261266A1-86E4-4D35-83BC-00A65691A957}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{261266A1-86E4-4D35-83BC-00A65691A957}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

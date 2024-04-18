@@ -14,6 +14,7 @@ public class AuthorName : CSharpFunctionalExtensions.ValueObject
         LastName = lastName;
         SecondName = secondName;
     }
+    private AuthorName(){}
 
     public static Result<AuthorName> Create(string firstName, string lastName, string secondName)
     {

@@ -9,5 +9,5 @@ public interface IAuthorStore
     public Task<Result<Author>> GetById(Guid id);
     public Task<Result> Create(Author author);
     public Task<Result> SaveChanges(Author author);
-    public Task<Result> Delite(Guid id);
+    public Task<Result> Delite(Author author);
 }

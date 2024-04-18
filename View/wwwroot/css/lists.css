@@ -1,0 +1,259 @@
+.AuthorsList
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 15px;
+    gap: 1vmax 0.5vmax;
+}
+.AuthorList--element
+{
+    box-sizing: content-box;
+    padding: 10px 15px;
+    background: orange;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.5em;
+    width: 7.5vmax;
+    height: 8vmax;
+}
+.AuthorList--element > input
+{
+    background: transparent;
+    color: black;
+    
+}
+.AuthorList--element--name
+{
+    display: flex;
+    flex-direction: column;
+}
+.AuthorList--element--name .secondName
+{
+    position: relative;
+}
+.AuthorList--element--name .secondName::before
+{
+    content: "\"";
+    position: absolute;
+    font-size: 1.1em;
+    top: -0.1em;
+    left: -0.4em;
+    color: black;
+}
+.AuthorList--element--name .secondName::after
+{
+    content: "\"";
+    position: absolute;
+    font-size: 1.1em;
+    top: 0.2em;
+    right: -0.5em;
+    color: black;
+}
+.AuthorList--element--dateOfBirth
+{
+    
+}
+
+.AuthorList--element > .AuthorList--element--controlls
+{
+    visibility: visible;
+    display: block;
+}
+.AuthorList--element > .AuthorList--element--confurm
+{
+    visibility: hidden;
+    display: none;
+}
+
+.AuthorList--element.updating > .AuthorList--element--controlls
+{
+    visibility: hidden;
+    display: none;
+}
+.AuthorList--element.updating > .AuthorList--element--confurm
+{
+    visibility: visible;
+    display: block;
+}
+
+.BooksList
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 15px;
+    gap: 1vmax 0.5vmax;
+}
+.BooksList--element
+{
+    box-sizing: content-box;
+    padding: 10px 15px;
+    background: orange;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.5em;
+    width: 7.5vmax;
+    height: 7.5vmax;
+}
+
+.BooksList--element--name
+{
+    position: relative;
+}
+.BooksList--element--name::before,
+.BooksList--element--name input.valueIndicator::before
+{
+    content: "\"";
+    position: absolute;
+    font-size: 1.1em;
+    top: -0.1em;
+    left: -0.4em;
+    color: black;
+}
+.BooksList--element--name::after,
+.BooksList--element--name input.valueIndicator::after
+{
+    content: "\"";
+    position: absolute;
+    font-size: 1.1em;
+    top: 0.2em;
+    right: -0.5em;
+    color: black;
+}
+
+.BooksList--element > .BooksList--element--controlls
+{
+    visibility: visible;
+    display: block;
+}
+.BooksList--element > .BooksList--element--confurm
+{
+    visibility: hidden;
+    display: none;
+}
+
+.BooksList--element.updating > .BooksList--element--controlls
+{
+    visibility: hidden;
+    display: none;
+}
+.BooksList--element.updating > .BooksList--element--confurm
+{
+    visibility: visible;
+    display: block;
+}
+
+.CreatePreview
+{
+    height: 9vmax;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+@keyframes Showing
+{
+    0%
+    {
+        opacity: 0;
+    }
+    100%
+    {
+        opacity: 100%;
+    }
+}
+
+.CreatePreview.show .preview
+{
+    visibility: visible;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background: rgba(200, 200, 200, .5);
+    min-width: 100%;
+    min-height: 100%;
+    
+}
+
+.CreatePreview.show .preview > *
+{
+    animation: Showing 1s;
+    width: 100%;
+    height: 100%;
+    font-size: 5vmax;
+    text-align: center;
+    vertical-align: middle;
+}
+.CreatePreview.show .creating
+{
+    visibility: hidden;
+    display: none;
+}
+
+
+.CreatePreview:not(.show) .preview
+{
+    visibility: hidden;
+    display: none;
+}
+.CreatePreview:not(.show) .creating
+{
+    visibility: visible;
+    display: flex;
+    justify-content: stretch;
+    align-items: stretch;
+    
+    animation: Showing 1s;
+}
+
+.hide
+{
+    visibility: hidden;
+    display: none;
+}
+.window
+{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.window
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(11, 11, 11, 0.85);
+}
+.window .CreateAuthourWindow--createForm,
+.window .UpdateBookWindow--createForm
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    background: orange;
+    padding: 10px 15px;
+    gap: 15px;
+    border-radius: 5px;
+}
+.window .CreateAuthourWindow--createForm .CreateAuthourWindow--createForm--elements,
+.window .UpdateBookWindow--createForm .UpdateBookWindow--createForm--elements
+{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+}

@@ -1,8 +1,137 @@
 @model List<Domain.Entitys.Author>
 
-<div class="authorsList">
-@foreach(var item in @Model)
-{
-    await Html.RenderPartialAsync("authorComponent", item);
-}
+<div class="AuthorsList">
+    @foreach(var item in @Model)
+    {
+        await Html.RenderPartialAsync("authorComponent", item);
+    }
+    @{ await Html.RenderPartialAsync("addElementComponent"); }
 </div>
+
+<script>
+
+    (function(){
+        let rootElement = document.querySelector(".AuthorsList")
+        let elements = document.querySelectorAll(".AuthorList--element");
+
+        if (elements.length === 0)
+        {
+            return;
+        }
+
+        elements.forEach(
+            ex =>
+            {
+                let deliteBtn = ex.querySelector(".deliteBtn");
+                let updateBtn = ex.querySelector(".updateBtn");
+
+                let indicators = ex.querySelectorAll(".valueIndicator");
+
+
+                deliteBtn.addEventListener("click", (evt) =>
+                {
+                    
+                    fetch(
+                        "@Url.Action("Delite", "Author")",
+                        {
+                            method : "DELETE",
+                            body :  ex.id.toString()
+                        }
+                    )
+                        .then(
+                            result =>
+                            {
+                                rootElement.removeChild(ex);
+                            },
+                            regect =>
+                            {
+                                console.log(regect);
+                            }
+                        )
+                })
+                
+                updateBtn.addEventListener("click",
+                    (evt) =>
+                    {
+                        ex.classList.add("updating")
+                        
+                        indicators.forEach(ind => 
+                        {
+                            console.log(ind);
+                            ind.classList.add("inUpdating");
+                            ind.tag = "input";
+                            ind.tagName = "input";
+                        }
+                        );
+                    }
+                );
+                
+            }
+        )
+
+    })()
+
+</script>
+
+<script>
+    
+    (
+    function ()
+    {
+        let addingElement = document.querySelector(".createPreview");
+
+        addingElement.addEventListener(
+            "mouseover",
+            () => addingElement.classList.remove("show")
+        )
+        addingElement.addEventListener(
+            "mouseout",
+            () => addingElement.classList.add("show")
+        )
+    
+        let clearBtn = addingElement.querySelector(".Clear");
+        let OkElement = addingElement.querySelector(".OK");
+    
+        let firstNameField = addingElement.querySelector(".firstName");
+        let secondNameField = addingElement.querySelector(".secondName");
+        let lastNameField = addingElement.querySelector(".lastName");
+
+        let yearOfBirthField = addingElement.querySelector(".AuthorList--element--dateOfBirth > .valueIndicator");
+
+        OkElement.addEventListener(
+        "click",
+        () =>
+        {
+            fetch(
+            "@Url.Action("Create","Author")",
+            {
+                method : "POST",
+                body : JSON.stringify(
+                {
+                    FirstName : firstNameField.value,
+                    LastName : lastNameField.value,
+                    SecondName : secondNameField.value,
+                    YearOfBirth : Number(yearOfBirthField.value)
+                })
+            }
+            )
+            .then(
+            ex => location.reload()
+            )
+            
+        }
+        );
+    
+        clearBtn.addEventListener(
+        "click",
+            () =>
+            {
+                firstNameField.value = "";
+                secondNameField.value = "";
+                lastNameField.value = "";
+            }
+        );
+        
+    }
+    )();
+</script>

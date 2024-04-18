@@ -1,18 +1,23 @@
 @model Domain.Entitys.Author
 
-<div class="AuthorList--element">
+<div class="AuthorList--element" id="@Model.Id">
     <div class="AuthorList--element--name">
-        <span >
+        <span class="valueIndicator">
             @Model.Name.FirstName
         </span>
-        <span class="secondName">
+        <span class="valueIndicator secondName">
             @Model.Name.SecondName
         </span>
-        <span>
+        <span class="valueIndicator">
             @Model.Name.LastName
         </span>
     </div>
     <div class="AuthorList--element--dateOfBirth">
-        @Model.YearOfBirth
+        <label for="bornDate">Born in</label>
+        <span name="bornDate" class="valueIndicator">@Model.YearOfBirth</span>
+    </div>
+    <div class="AuthorList--element--controlls">
+        <button class="deliteBtn">Delite</button>
+        <button class="updateBtn">Update</button>
     </div>
 </div>

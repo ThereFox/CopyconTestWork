@@ -1,0 +1,105 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 14px;
+}
+
+.container
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container > *
+{
+  max-width: 33vmax;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+header
+{
+  background: darkorange;
+  width: 100vw;
+  height: 10vh;
+}
+nav
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navList
+{
+  display: flex;
+  justify-content: flex-start;
+  width: 80%;
+  height: 10vh;
+  align-items: center;
+  gap: 0.1vw;
+  list-style: none;
+}
+
+a, button
+{
+  font-style: normal;
+  font-weight: 900;
+  color: aliceblue;
+  text-decoration: none;
+}
+
+.navList--element
+{
+  padding: 10px 15px;
+  background: orangered;
+}
+
+button
+{
+  padding: 5px 7.5px;
+  background: orangered;
+  outline: none;
+  box-shadow: none;
+  border: 1px darkred;
+  cursor: pointer;
+}
+
+button:hover
+{
+  background: darkred;
+}
+
+select, input
+{
+  padding: 5px 7.5px;
+  background: navajowhite;
+  outline: none;
+  box-shadow: none;
+  border: 1px darkred;
+}
+
+.navList--element:hover
+{
+  background: coral;
+}

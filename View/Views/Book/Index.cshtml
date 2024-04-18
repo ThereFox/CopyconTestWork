@@ -1,8 +1,437 @@
 @model List<Domain.Entitys.Book>
 
-<div class="booksList">
-@foreach(var item in @Model)
-{
-    await Html.RenderPartialAsync("bookComponent", item);
-}
+<div class="BooksList" >
+    @foreach(var item in @Model)
+    {
+        await Html.RenderPartialAsync("bookComponent", item);
+    }
+    @{ await Html.RenderPartialAsync("addElementComponent", null); }
 </div>
+
+@{ await Html.RenderPartialAsync("CreateAuthourWindow"); }
+@{ await Html.RenderPartialAsync("updateBookWindow");}
+
+
+<script>
+    (    function ()
+    {
+
+
+
+        //////////////////////////////////////////////////////////
+
+        async function CreateUser(firstName, secondName, lastName, yearOfBirth)
+        {
+            var content = JSON.stringify(
+                {
+                    "FirstName" : firstName,
+                    "LastName" : lastName,
+                    "SecondName" : secondName,
+                    "YearOfBirth" : yearOfBirth
+                });
+
+
+            var createUserResult = await fetch(
+                "@Url.Action("Create","Author")",
+                {
+                    method : "POST",
+                    headers : { 'Content-Type': 'application/json' },
+                    body : content
+                }
+            )
+
+            if(createUserResult.ok == false)
+            {
+                return new Promise((resolve, reject) => reject(createUserResult.body))
+            }
+
+            return new Promise((resolve, reject) => resolve(createUserResult.body));
+        }
+
+        async function UpdateBook(bookId, name, writeYear, authourId, languageCode)
+        {
+            var content = JSON.stringify(
+                {
+                    "Id" : bookId,
+                    "Name" : name,
+                    "Year" : writeYear,
+                    "AuthorId" : authourId,
+                    "LanguageId" : languageCode
+                });
+
+            var createUserResult = await fetch(
+                "@Url.Action("Update","Book")",
+                {
+                    method : "PUT",
+                    headers : { 'Content-Type': 'application/json' },
+                    body : content
+                }
+            )
+
+            if(createUserResult.ok == false)
+            {
+                return new Promise((resolve, reject) => reject(createUserResult.body))
+            }
+
+            return new Promise((resolve, reject) => resolve(createUserResult.body));
+        }
+
+        async function DeliteBook(bookId)
+        {
+
+            var content = JSON.stringify( { "Id" : bookId } );
+
+            var createUserResult = await fetch(
+                "@Url.Action("Delite","Book")",
+                {
+                    method : "DELETE",
+                    headers : { 'Content-Type': 'application/json' },
+                    body : content
+                }
+            )
+
+            if(createUserResult.ok == false)
+            {
+                return new Promise((resolve, reject) => reject(createUserResult.body))
+            }
+
+            return new Promise((resolve, reject) => resolve(createUserResult.body));
+        }
+
+        async function CreateBook(name, writeYear, authourId, languageCode)
+        {
+            var content = JSON.stringify(
+                {
+                    "Name" : name,
+                    "Year" : writeYear,
+                    "AuthorId" : authourId,
+                    "LanguageId" : languageCode
+                });
+
+            var createUserResult = await fetch(
+                "@Url.Action("Create","Book")",
+                {
+                    method : "POST",
+                    headers : { 'Content-Type': 'application/json' },
+                    body : content
+                }
+            )
+
+            if(createUserResult.ok == false)
+            {
+                return new Promise((resolve, reject) => reject(createUserResult.body));
+            }
+
+            return new Promise((resolve, reject) => resolve(createUserResult.body));
+        }
+
+
+
+
+
+
+
+        let rootElement = document.querySelector(".BooksList")
+        let elements = rootElement.querySelectorAll(".BooksList--element.getted");
+
+        let nameField = rootElement.querySelector(".BooksList--element .BooksList--element--name");
+        let yearField = rootElement.querySelector(".BooksList--element .BooksList--element--year");
+        let languageField = rootElement.querySelector(".BooksList--element .BooksList--element--language");
+        let authourField = rootElement.querySelector(".BooksList--element .BooksList--element--Author");
+
+        let updateWindow = document.querySelector(".UpdateBookWindow");
+
+        let updateWindowElements = updateWindow.querySelector(".UpdateBookWindow--createForm .UpdateBookWindow--createForm--elements");
+
+        let updateWindowConfirmButton = updateWindow.querySelector(".UpdateBookWindow--createForm .UpdateBookWindow--createForm--confirm .OK");
+        let updateWindowCancelButton = updateWindow.querySelector(".UpdateBookWindow--createForm .UpdateBookWindow--createForm--confirm .Cancel");
+
+        let updateNameField = updateWindowElements.querySelector(".UpdateBookWindow--createForm--elements__name .valueIndicator");
+        let updateYearField = updateWindowElements.querySelector(".UpdateBookWindow--createForm--elements__dateOfWrite .valueIndicator");
+        let updateAuthourSelect = updateWindowElements.querySelector(".UpdateBookWindow--createForm--elements__authorSelect .valueIndicator");
+        let updateLanguageField = updateWindowElements.querySelector(".UpdateBookWindow--createForm--elements__language .valueIndicator");
+
+        var CreateAuthourWindow = document.querySelector(".CreateAuthourWindow");
+        var CreateAuthourForm = CreateAuthourWindow.querySelector(".CreateAuthourWindow--createForm");
+
+        var authourFirstNameField = CreateAuthourForm.querySelector(".CreateAuthourWindow--createForm--elements .firstName");
+        var authourSecondNameField = CreateAuthourForm.querySelector(".CreateAuthourWindow--createForm--elements .secondName");
+        var authourLastNameField = CreateAuthourForm.querySelector(".CreateAuthourWindow--createForm--elements .lastName");
+        var authourYearOfBirthField = CreateAuthourForm.querySelector(".CreateAuthourWindow--createForm--elements .year");
+
+        var createAuthourConfirmButton = CreateAuthourForm.querySelector(".CreateAuthourWindow--confirm .OK");
+        var createAuthourCancelButton = CreateAuthourForm.querySelector(".CreateAuthourWindow--confirm .Cancel");
+
+
+        let addingElement = document.querySelector(".CreatePreview");
+
+        let clearButton = addingElement.querySelector(".BooksList--element--creating--confirm .Clear");
+        let OkButton = addingElement.querySelector(".BooksList--element--creating--confirm .OK");
+
+        let createBookAuthoursSelects = addingElement.querySelector(".BooksList--element--authorSelect .valueIndicator");
+        let createBookNameField = addingElement.querySelector(".BooksList--element--name .valueIndicator");
+        let createBookYearOfWriteField = addingElement.querySelector(".BooksList--element--dateOfWrite .valueIndicator");
+        let createBookLanguageSelect = addingElement.querySelector(".BooksList--element--language .valueIndicator");
+
+        updateWindowConfirmButton.addEventListener("click",
+            async () =>
+            {
+                try{
+                    await onUpdateBookHandler();
+                }
+                catch (error)
+                {
+                    console.log(error);
+                }
+            }
+        );
+        updateWindowCancelButton.addEventListener("click",
+            () =>
+            {
+                HideWindow(updateWindow);
+            }
+        );
+        createBookAuthoursSelects.addEventListener("change",
+            () =>
+            {
+                if (createBookAuthoursSelects.value != "new")
+                {
+                    return;
+                }
+
+                OpenWindow(CreateAuthourWindow);
+                createBookAuthoursSelects.value = GetAuthourDefaultValue();
+            }
+        );
+        createAuthourConfirmButton.addEventListener("click",
+            async () =>
+            {
+                try{
+                    var newUserId = await CreateUser(
+                        authourFirstNameField.value,
+                        authourSecondNameField.value,
+                        authourLastNameField.value,
+                        Number(authourYearOfBirthField.value)
+                    );
+                    AddSelectionVariant(
+                        newUserId,
+                        authourFirstNameField.value,
+                        authourSecondNameField.value,
+                        authourLastNameField.value,
+                        authourYearOfBirthField.value
+                    );
+                    ClearFilds()
+                    HideWindow(CreateAuthourWindow)
+                }
+                catch(error)
+                {
+                    console.log(error);
+                }
+
+
+            }
+        );
+        createAuthourCancelButton.addEventListener("click",
+            () =>
+            {
+                HideWindow(CreateAuthourWindow);
+                ClearFilds();
+
+            }
+        );
+
+        addingElement.addEventListener(
+            "mouseover",
+            ShowAddingElement
+        )
+        addingElement.addEventListener(
+            "mouseout",
+            ShowPreview
+        )
+        createAuthourConfirmButton.addEventListener(
+            "click",
+            async () =>
+            {
+                try{
+                    await onCreateAuthourHandler(
+                        nameField.value,
+                        Number(createBookYearOfWriteField.value),
+                        createBookAuthoursSelects.value,
+                        Number(createBookLanguageSelect.value)
+                    );
+                }
+                catch(error)
+                {
+                    console.log(error);
+                }
+            }
+        );
+        clearButton.addEventListener(
+            "click",
+            () =>
+            {
+                ClearFields();
+            }
+        );
+
+
+        elements.forEach(
+            ex =>
+            {
+
+
+                let deliteBtn = ex.querySelector(".BooksList--element--controlls .deliteButton");
+                let updateBtn = ex.querySelector(".BooksList--element--controlls .updateButton");
+
+                deliteBtn.addEventListener("click",
+                    async () =>
+                    {
+                        try{
+                            let deliteResult = await DeliteBook(ex.id);
+
+                            deliteBookElement(ex);
+                        }
+                        catch(error)
+                        {
+                            console.log(error);
+                        }
+                    })
+
+                updateBtn.addEventListener("click",
+                    (evt) =>
+                    {
+                        GoToUpdateWindow(
+                            ex.id,
+                            nameField.innerText,
+                            Number(yearField.getAttribute("data-year")),
+                            authourField.getAttribute("data-authourId"),
+                            languageField.getAttribute("data-languageId")
+                        );
+                    }
+                );
+
+            }
+        )
+
+
+
+        function UpdateBookElement(id, name, year, authourId, languageId)
+        {
+            document.location.reload();
+        }
+
+        function deliteBookElement(element)
+        {
+            rootElement.removeChild(element);
+        }
+
+        function ClearFields()
+        {
+            nameField.value = "";
+            createBookYearOfWriteField.value = "";
+        }
+
+        function AddNewElement()
+        {
+            document.location.reload();
+        }
+
+        function ShowPreview()
+        {
+            addingElement.classList.add("show")
+        }
+        function ShowAddingElement()
+        {
+            addingElement.classList.remove("show")
+        }
+
+        function HideWindow(windowElement)
+        {
+            windowElement.classList.add("hide");
+        }
+
+        function OpenWindow(window)
+        {
+            window.classList.remove("hide");
+        }
+
+        function ClearFilds()
+        {
+            authourFirstNameField.value = "";
+            authourSecondNameField.value = "";
+            authourLastNameField.value = "";
+            authourYearOfBirthField.value = "";
+        }
+        function PutValuesToUpdateWindow(id, name, year, authourId, languageId)
+        {
+            updateWindowElements.setAttribute("data-updatedId", id);
+            updateNameField.value = name;
+            updateYearField.value = year;
+            updateAuthourSelect.value = authourId;
+            updateLanguageField.value = languageId;
+        }
+
+        function GoToUpdateWindow(id, name, year, authourId, languageId)
+        {
+            OpenWindow(updateWindow);
+            PutValuesToUpdateWindow(
+                id,
+                name,
+                year,
+                authourId,
+                languageId
+            );
+        }
+
+        function GetAuthourDefaultValue()
+        {
+            return "-1";
+        }
+        function AddSelectionVariant(id, firstName, secondName, lastName, yearOfBirth)
+        {
+
+            let newElement = createBookAuthoursSelects.lastElementChild;
+
+            createBookAuthoursSelects.removeChild(newElement);
+
+            let newOption = document.createElement("option");
+
+            newOption.text = `${firstName} "${secondName}" ${lastName} : ${yearOfBirth}`
+            newOption.id = id;
+
+            createBookAuthoursSelects.appendChild(newOption);
+            createBookAuthoursSelects.appendChild(newElement);
+
+
+        }
+        async function onUpdateBookHandler()
+        {
+            var updateResult = await UpdateBook(
+                updateWindowElements.getAttribute("data-updatedId"),
+                updateNameField.value,
+                updateYearField.value,
+                updateAuthourSelect.value,
+                updateLanguageField.value
+            );
+
+            HideWindow(updateWindow);
+            UpdateBookElement();
+
+            return new Promise((res, err) => res());
+        }
+        async function onCreateAuthourHandler(name, year, authourId, languageId)
+        {
+            await CreateBook(
+                nameField.value,
+                Number(createBookYearOfWriteField.value),
+                createBookAuthoursSelects.value,
+                Number(createBookLanguageSelect.value)
+            );
+            ClearFields();
+            AddNewElement();
+
+            return new Promise((sucsess, error) => sucsess());
+        }
+    })();
+
+</script>
