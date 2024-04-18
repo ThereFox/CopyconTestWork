@@ -16,7 +16,7 @@
                 <option hidden disabled selected value="-1"> -- select an option -- </option>
                 @foreach (var authour in await _authors.GetAll())
                 {
-                    <option value="@authour.Id">@authour.Name.FirstName "@authour.Name.SecondName" @authour.Name.LastName (@authour.YearOfBirth)</option>
+                    <option value="@authour.Id">@authour.Name.FirstName @authour.Name.LastName (@authour.YearOfBirth)</option>
                 }
                 <option value="new">New authour</option>
             </select>
