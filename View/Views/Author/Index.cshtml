@@ -8,130 +8,292 @@
     @{ await Html.RenderPartialAsync("addElementComponent"); }
 </div>
 
+@{ await Html.RenderPartialAsync("UpdateAuthourWindow"); }
+
 <script>
-
-    (function(){
-        let rootElement = document.querySelector(".AuthorsList")
-        let elements = document.querySelectorAll(".AuthorList--element");
-
-        if (elements.length === 0)
+    (
+        function ()
         {
-            return;
-        }
 
-        elements.forEach(
-            ex =>
+            async function DeliteUser(userId)
             {
-                let deliteBtn = ex.querySelector(".deliteBtn");
-                let updateBtn = ex.querySelector(".updateBtn");
 
-                let indicators = ex.querySelectorAll(".valueIndicator");
+                var content = JSON.stringify( { "Id" : userId } );
 
+                var createUserResult = await fetch(
+                    "@Url.Action("Delite","Author")",
+                    {
+                        method : "DELETE",
+                        headers : { 'Content-Type': 'application/json' },
+                        body : content
+                    }
+                )
 
-                deliteBtn.addEventListener("click", (evt) =>
+                if(createUserResult.ok == false)
                 {
-                    
-                    fetch(
-                        "@Url.Action("Delite", "Author")",
-                        {
-                            method : "DELETE",
-                            body :  ex.id.toString()
+                    return new Promise((resolve, reject) => reject(createUserResult.body))
+                }
+
+                return new Promise((resolve, reject) => resolve(createUserResult.body));
+            }
+            async function UpdateUser(userId, firstName, lastName, secondName, yearOfBirth)
+            {
+                var content = JSON.stringify(
+                    {
+                        "Id" : userId,
+                        "FirstName" : firstName,
+                        "LastName" : lastName,
+                        "SecondName" : secondName,
+                        "YearOfBirth" : yearOfBirth
+                    });
+
+                var createUserResult = await fetch(
+                    "@Url.Action("Update","Author")",
+                    {
+                        method : "PUT",
+                        headers : { 'Content-Type': 'application/json' },
+                        body : content
+                    }
+                )
+
+                if(createUserResult.ok == false)
+                {
+                    return new Promise((resolve, reject) => reject(createUserResult.body))
+                }
+
+                return new Promise((resolve, reject) => resolve(createUserResult.body));
+            }
+            async function CreateUser(firstName, secondName, lastName, yearOfBirth)
+            {
+                var content = JSON.stringify(
+                    {
+                        "FirstName" : firstName,
+                        "LastName" : lastName,
+                        "SecondName" : secondName,
+                        "YearOfBirth" : yearOfBirth
+                    });
+
+                console.log(content);
+
+                var createUserResult = await fetch(
+                    "@Url.Action("Create","Author")",
+                    {
+                        method : "POST",
+                        headers : { 'Content-Type': 'application/json' },
+                        body : content
+                    }
+                )
+
+                if(createUserResult.ok == false)
+                {
+                    return new Promise((resolve, reject) => reject(createUserResult.body))
+                }
+
+                return new Promise((resolve, reject) => resolve(createUserResult.body));
+            }
+
+
+            let updateWindow = document.querySelector(".CreateAuthourWindow");
+            let updateAuthourFieldsElements = updateWindow.querySelector(".CreateAuthourWindow--createForm .CreateAuthourWindow--createForm--elements");
+            let updateAuthourControlls = updateWindow.querySelector(".CreateAuthourWindow--createForm .CreateAuthourWindow--confirm");
+            
+            
+            let updateAuthourFirstNameField = updateAuthourFieldsElements.querySelector(".firstName");
+            let updateAuthourSecondNameField = updateAuthourFieldsElements.querySelector(".secondName");
+            let updateAuthourLastNameField = updateAuthourFieldsElements.querySelector(".lastName");
+            let updateAuthourYearOfBirthField = updateAuthourFieldsElements.querySelector(".year");
+
+            let cancelAuthourUpdateWindow = updateAuthourControlls.querySelector(".Cancel");
+            let UpdateAuthourConfirmButton = updateAuthourControlls.querySelector(".OK");
+
+
+            let rootElement = document.querySelector(".AuthorsList");
+            let elements = rootElement.querySelectorAll(".AuthorList--element:not(.AuthorList--element.CreatePreview):not(.AuthorList--element.creating):not(.AuthorList--element.preview)");
+
+            let addingElement = document.querySelector(".AuthorList--element.CreatePreview");
+
+            let clearButton = addingElement.querySelector(".creating .AuthorList--element--creating--confirm .Clear");
+            let createAuthourConfirmButton = addingElement.querySelector(".creating .AuthorList--element--creating--confirm .OK");
+
+            let createAuthourNameFields = addingElement.querySelector(".creating .AuthorList--element--name");
+
+            let createAuthourFirstNameField = createAuthourNameFields.querySelector(".AuthorList--element--name__first .valueIndicator");
+            let createAuthourSecondNameField = createAuthourNameFields.querySelector(".AuthorList--element--name__second .valueIndicator");
+            let createAuthourLastNameField = createAuthourNameFields.querySelector(".AuthorList--element--name__last .valueIndicator");
+
+            let createAuthourYearOfWriteField = addingElement.querySelector(".creating .AuthorList--element--dateOfBirth .valueIndicator");
+
+            addingElement.addEventListener(
+                "mouseover",
+                ShowAddingElement
+            )
+            addingElement.addEventListener(
+                "mouseout",
+                ShowPreview
+            )
+
+
+            createAuthourConfirmButton.addEventListener("click",
+            async () =>
+            {
+                try {
+                    await onCreateAuthour(
+                        createAuthourFirstNameField.value,
+                        createAuthourSecondNameField.value,
+                        createAuthourLastNameField.value,
+                        Number(createAuthourYearOfWriteField.value)
+                    );
+                }
+                catch (error)
+                {
+                    console.log(error);
+                }
+            }
+            );
+
+            clearButton.addEventListener("click",
+                () =>
+                {
+                    ClearFilds();
+                }
+            );
+
+            cancelAuthourUpdateWindow.addEventListener("click",
+            () =>
+                {
+                    HideWindow(updateWindow);
+                }
+            );
+            UpdateAuthourConfirmButton.addEventListener("click",
+            async () =>
+            {
+                await onUpdateAuthour(
+                    updateAuthourControlls.getAttribute("data-updatedId"),
+                    updateAuthourFirstNameField.value,
+                    updateAuthourSecondNameField.value,
+                    updateAuthourLastNameField.value,
+                    Number(updateAuthourYearOfBirthField.value)
+                );
+            }
+            );
+            
+            elements.forEach(element =>
+            {
+                let firstNameElement = element.querySelector(".AuthorList--element--name .valueIndicator.firstName");
+                let secondNameElement = element.querySelector(".AuthorList--element--name .valueIndicator.secondName");
+                let lastNameElement = element.querySelector(".AuthorList--element--name .valueIndicator.lastName");
+                let yearElement = element.querySelector(".AuthorList--element--dateOfBirth .valueIndicator");
+            
+                let updateButton = element.querySelector(".AuthorList--element--controlls .updateBtn");
+                let deliteButton = element.querySelector(".AuthorList--element--controlls .deliteBtn")
+
+
+                deliteButton.addEventListener("click", 
+                async () =>
+                    {
+                    console.log(123);
+                        try{
+                            let deliteResult = await DeliteUser(element.id);
+
+                            deliteBookElement(element);
                         }
-                    )
-                        .then(
-                            result =>
-                            {
-                                rootElement.removeChild(ex);
-                            },
-                            regect =>
-                            {
-                                console.log(regect);
-                            }
-                        )
-                })
-                
-                updateBtn.addEventListener("click",
+                        catch(error)
+                        {
+                            console.log(error);
+                        }
+                    });
+                    
+                updateButton.addEventListener("click",
                     (evt) =>
                     {
-                        ex.classList.add("updating")
-                        
-                        indicators.forEach(ind => 
-                        {
-                            console.log(ind);
-                            ind.classList.add("inUpdating");
-                            ind.tag = "input";
-                            ind.tagName = "input";
-                        }
+                        GoToUpdateWindow(
+                            element.id,
+                            firstNameElement.innerText,
+                            secondNameElement.innerText,
+                            lastNameElement.innerText,
+                            Number(yearElement.getAttribute("data-year"))
                         );
-                    }
-                );
-                
-            }
-        )
-
-    })()
-
-</script>
-
-<script>
-    
-    (
-    function ()
-    {
-        let addingElement = document.querySelector(".createPreview");
-
-        addingElement.addEventListener(
-            "mouseover",
-            () => addingElement.classList.remove("show")
-        )
-        addingElement.addEventListener(
-            "mouseout",
-            () => addingElement.classList.add("show")
-        )
-    
-        let clearBtn = addingElement.querySelector(".Clear");
-        let OkElement = addingElement.querySelector(".OK");
-    
-        let firstNameField = addingElement.querySelector(".firstName");
-        let secondNameField = addingElement.querySelector(".secondName");
-        let lastNameField = addingElement.querySelector(".lastName");
-
-        let yearOfBirthField = addingElement.querySelector(".AuthorList--element--dateOfBirth > .valueIndicator");
-
-        OkElement.addEventListener(
-        "click",
-        () =>
-        {
-            fetch(
-            "@Url.Action("Create","Author")",
-            {
-                method : "POST",
-                body : JSON.stringify(
-                {
-                    FirstName : firstNameField.value,
-                    LastName : lastNameField.value,
-                    SecondName : secondNameField.value,
-                    YearOfBirth : Number(yearOfBirthField.value)
-                })
-            }
-            )
-            .then(
-            ex => location.reload()
-            )
+                    });
             
-        }
-        );
-    
-        clearBtn.addEventListener(
-        "click",
-            () =>
+            });
+
+
+
+
+            function ShowPreview()
             {
-                firstNameField.value = "";
-                secondNameField.value = "";
-                lastNameField.value = "";
+                addingElement.classList.add("show")
             }
-        );
-        
-    }
+            function ShowAddingElement()
+            {
+                addingElement.classList.remove("show")
+            }
+            function HideWindow(windowElement)
+            {
+                windowElement.classList.add("hide");
+            }
+
+            function OpenWindow(window)
+            {
+                window.classList.remove("hide");
+            }
+
+            function ClearFilds()
+            {
+                createAuthourFirstNameField.value = "";
+                createAuthourSecondNameField.value = "";
+                createAuthourLastNameField.value = "";
+                createAuthourYearOfWriteField.value = "";
+            }
+            function PutValuesToUpdateWindow(id, firstName, secondName, lastName, yearOfBirth)
+            {
+                updateAuthourControlls.setAttribute("data-updatedId", id);
+                updateAuthourFirstNameField.value = firstName;
+                updateAuthourSecondNameField.value = secondName;
+                updateAuthourLastNameField.value = lastName;
+                updateAuthourYearOfBirthField.value = yearOfBirth;
+            }
+
+            function GoToUpdateWindow(id, firstName, secondName, lastName, yearOfBirth)
+            {
+                OpenWindow(updateWindow);
+                PutValuesToUpdateWindow(
+                    id,
+                    firstName,
+                    secondName,
+                    lastName,
+                    yearOfBirth
+                );
+            }
+            async function onUpdateAuthour(id, firstName, secondName, lastName, yearOfBirth)
+            {
+                var updateResult = await UpdateUser(id, firstName, secondName, lastName, yearOfBirth);
+                
+                HideWindow(updateWindow);
+                UpdateAuthourElement();
+            }
+            function UpdateAuthourElement(authourId, firstName, secondName, lastName, yearOfBirth)
+            {
+                document.location.reload();    
+            }
+            async function onCreateAuthour(firstName, secondName, lastName, yearOfBirth)
+            {
+                var newUserId = await CreateUser(firstName, secondName, lastName, yearOfBirth);
+
+                addNewAuthourComponent();
+            }
+            function deliteBookElement(element)
+            {
+                rootElement.removeChild(element);
+            }
+            function addNewAuthourComponent()
+            {
+                document.location.reload();
+            }
+            function HideWindow(windowElement)
+            {
+                windowElement.classList.add("hide");
+            }
+        }
     )();
 </script>

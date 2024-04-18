@@ -16,10 +16,6 @@
     (    function ()
     {
 
-
-
-        //////////////////////////////////////////////////////////
-
         async function CreateUser(firstName, secondName, lastName, yearOfBirth)
         {
             var content = JSON.stringify(
@@ -134,11 +130,6 @@
         let rootElement = document.querySelector(".BooksList")
         let elements = rootElement.querySelectorAll(".BooksList--element.getted");
 
-        let nameField = rootElement.querySelector(".BooksList--element .BooksList--element--name");
-        let yearField = rootElement.querySelector(".BooksList--element .BooksList--element--year");
-        let languageField = rootElement.querySelector(".BooksList--element .BooksList--element--language");
-        let authourField = rootElement.querySelector(".BooksList--element .BooksList--element--Author");
-
         let updateWindow = document.querySelector(".UpdateBookWindow");
 
         let updateWindowElements = updateWindow.querySelector(".UpdateBookWindow--createForm .UpdateBookWindow--createForm--elements");
@@ -207,30 +198,21 @@
             async () =>
             {
                 try{
-                    var newUserId = await CreateUser(
+                    await onCreateAuthourHandler(
                         authourFirstNameField.value,
                         authourSecondNameField.value,
                         authourLastNameField.value,
                         Number(authourYearOfBirthField.value)
                     );
-                    AddSelectionVariant(
-                        newUserId,
-                        authourFirstNameField.value,
-                        authourSecondNameField.value,
-                        authourLastNameField.value,
-                        authourYearOfBirthField.value
-                    );
-                    ClearFilds()
-                    HideWindow(CreateAuthourWindow)
                 }
                 catch(error)
                 {
                     console.log(error);
                 }
-
-
             }
         );
+
+
         createAuthourCancelButton.addEventListener("click",
             () =>
             {
@@ -245,16 +227,17 @@
             ShowAddingElement
         )
         addingElement.addEventListener(
-            "mouseout",
+            "mouseleave",
             ShowPreview
         )
-        createAuthourConfirmButton.addEventListener(
+
+        OkButton.addEventListener(
             "click",
             async () =>
             {
                 try{
-                    await onCreateAuthourHandler(
-                        nameField.value,
+                    await onCreateBookHandler(
+                        createBookNameField.value,
                         Number(createBookYearOfWriteField.value),
                         createBookAuthoursSelects.value,
                         Number(createBookLanguageSelect.value)
@@ -273,11 +256,25 @@
                 ClearFields();
             }
         );
+        updateAuthourSelect.addEventListener("change",
+            () =>
+            {
+                if (updateAuthourSelect.value != "new")
+                {
+                    return;
+                }
 
+                OpenWindow(CreateAuthourWindow);
+                updateAuthourSelect.value = GetAuthourDefaultValue();
+            })
 
         elements.forEach(
             ex =>
             {
+                let nameField = ex.querySelector(".BooksList--element--name");
+                let yearField = ex.querySelector(".BooksList--element--year");
+                let languageField = ex.querySelector(".BooksList--element--language");
+                let authourField = ex.querySelector(".BooksList--element--Author");
 
 
                 let deliteBtn = ex.querySelector(".BooksList--element--controlls .deliteButton");
@@ -327,8 +324,10 @@
 
         function ClearFields()
         {
-            nameField.value = "";
+            createBookNameField.value = "";
             createBookYearOfWriteField.value = "";
+            createBookLanguageSelect.value = 1;
+            createBookAuthoursSelects.value = -1;
         }
 
         function AddNewElement()
@@ -387,20 +386,20 @@
         {
             return "-1";
         }
-        function AddSelectionVariant(id, firstName, secondName, lastName, yearOfBirth)
+        function AddSelectionVariant(selection, id, firstName, secondName, lastName, yearOfBirth)
         {
 
-            let newElement = createBookAuthoursSelects.lastElementChild;
+            let newElement = selection.lastElementChild;
 
-            createBookAuthoursSelects.removeChild(newElement);
+            selection.removeChild(newElement);
 
             let newOption = document.createElement("option");
 
             newOption.text = `${firstName} "${secondName}" ${lastName} : ${yearOfBirth}`
             newOption.id = id;
 
-            createBookAuthoursSelects.appendChild(newOption);
-            createBookAuthoursSelects.appendChild(newElement);
+            selection.appendChild(newOption);
+            selection.appendChild(newElement);
 
 
         }
@@ -419,18 +418,41 @@
 
             return new Promise((res, err) => res());
         }
-        async function onCreateAuthourHandler(name, year, authourId, languageId)
+        async function onCreateBookHandler(name, year, authourId, languageId)
         {
             await CreateBook(
-                nameField.value,
-                Number(createBookYearOfWriteField.value),
-                createBookAuthoursSelects.value,
-                Number(createBookLanguageSelect.value)
+                name,
+                year,
+                authourId,
+                languageId
             );
             ClearFields();
             AddNewElement();
 
             return new Promise((sucsess, error) => sucsess());
+        }
+        async function onCreateAuthourHandler(firstName, secondName, lastName, yearOfBirth)
+        {
+            var newUserId = await CreateUser(
+                firstName,
+                secondName,
+                lastName,
+                yearOfBirth
+            );
+            AddOptionVarianToSelects(
+                newUserId,
+                firstName,
+                secondName,
+                lastName,
+                yearOfBirth
+            );
+            ClearFilds()
+            HideWindow(CreateAuthourWindow)
+        }
+        function AddOptionVarianToSelects(id, firstName, secondName, lastName, yearOfBirth)
+        {
+            AddSelectionVariant(createBookAuthoursSelects, id, firstName, secondName, lastName, yearOfBirth);
+            AddSelectionVariant(updateAuthourSelect, id, firstName, secondName, lastName, yearOfBirth);
         }
     })();
 

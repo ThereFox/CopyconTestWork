@@ -9,10 +9,10 @@
         @Model.Year year
     </div>
     <div class="BooksList--element--language" data-languageId="@Model.OriginalLanguage.Id">
-        @((LanguageEnum)Model.OriginalLanguage.Id) lang
+        (@((LanguageEnum)Model.OriginalLanguage.Id))
     </div>
     <div class="BooksList--element--Author" data-authourId ="@Model.Author.Id">
-        Writer : @Model.Author.Name.FirstName - @Model.Author.Name.SecondName - @Model.Author.Name.LastName : @Model.Author.YearOfBirth
+        @Model.Author.Name.FirstName @Model.Author.Name.LastName (@Model.Author.YearOfBirth)
     </div>
     <div class="BooksList--element--controlls">
         <button class="deliteButton">Delite</button>

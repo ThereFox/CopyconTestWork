@@ -107,23 +107,21 @@
 {
     position: relative;
 }
-.BooksList--element--name::before,
-.BooksList--element--name input.valueIndicator::before
+.getted .BooksList--element--name::before
 {
     content: "\"";
     position: absolute;
     font-size: 1.1em;
     top: -0.1em;
-    left: -0.4em;
+    left: -0.45em;
     color: black;
 }
-.BooksList--element--name::after,
-.BooksList--element--name input.valueIndicator::after
+.getted .BooksList--element--name::after
 {
     content: "\"";
     position: absolute;
     font-size: 1.1em;
-    top: 0.2em;
+    top: 0.4em;
     right: -0.5em;
     color: black;
 }
@@ -152,8 +150,8 @@
 
 .CreatePreview
 {
-    height: 9vmax;
-    
+    height: 10vmax;
+    width: 9vmax;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -209,8 +207,8 @@
 {
     visibility: visible;
     display: flex;
-    justify-content: stretch;
-    align-items: stretch;
+    justify-content: center;
+    align-items: center;
     
     animation: Showing 1s;
 }
@@ -256,4 +254,13 @@
     align-items: flex-start;
     flex-direction: column;
     gap: 5px;
+}
+
+.CreateAuthourWindow
+{
+    z-index: 10;
+}
+.UpdateBookWindow
+{
+    z-index: 5;
 }

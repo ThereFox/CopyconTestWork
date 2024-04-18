@@ -2,19 +2,19 @@
 
 <div class="AuthorList--element" id="@Model.Id">
     <div class="AuthorList--element--name">
-        <span class="valueIndicator">
+        <span class="valueIndicator firstName">
             @Model.Name.FirstName
         </span>
         <span class="valueIndicator secondName">
             @Model.Name.SecondName
         </span>
-        <span class="valueIndicator">
+        <span class="valueIndicator lastName">
             @Model.Name.LastName
         </span>
     </div>
     <div class="AuthorList--element--dateOfBirth">
         <label for="bornDate">Born in</label>
-        <span name="bornDate" class="valueIndicator">@Model.YearOfBirth</span>
+        <span name="bornDate" data-year="@Model.YearOfBirth" class="valueIndicator">@Model.YearOfBirth</span>
     </div>
     <div class="AuthorList--element--controlls">
         <button class="deliteBtn">Delite</button>
