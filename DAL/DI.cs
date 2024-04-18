@@ -9,10 +9,10 @@ public static class DI
 {
     public static IServiceCollection AddDAL(this IServiceCollection services, Action<DbContextOptionsBuilder> DBconfiguration)
     {
-        services.AddDbContext<BasicDataBaseContext>(DBconfiguration, ServiceLifetime.Singleton);
+        services.AddDbContext<BasicDataBaseContext>(DBconfiguration, ServiceLifetime.Transient);
 
-        services.AddSingleton<IAuthorStore, AuthorStore>();
-        services.AddSingleton<IBookStore, BookStore>();
+        services.AddTransient<IAuthorStore, AuthorStore>();
+        services.AddTransient<IBookStore, BookStore>();
         
         return services;
     }

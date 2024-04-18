@@ -7,8 +7,8 @@ public static class DI
 {
     public static IServiceCollection AddApp(this IServiceCollection services)
     {
-        services.AddSingleton<AuthorsServices>();
-        services.AddSingleton<BooksServices>();
+        services.AddTransient<AuthorsServices>();
+        services.AddTransient<BooksServices>();
 
         return services;
     }
