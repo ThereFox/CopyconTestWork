@@ -1,16 +1,19 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER $APP_UID
 WORKDIR /app
-EXPOSE 5000
-EXPOSE 5001
+EXPOSE 8080
+EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["BookTest/View.csproj", "BookTest/"]
-RUN dotnet restore "BookTest/View.csproj"
+COPY ["View/View.csproj", "View/"]
+COPY ["App/App.csproj", "App/"]
+COPY ["Domain/Domain.csproj", "Domain/"]
+COPY ["DAL/DAL.csproj", "DAL/"]
+RUN dotnet restore "View/View.csproj"
 COPY . .
-WORKDIR "/src/BookTest"
+WORKDIR "/src/View"
 RUN dotnet build "View.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
