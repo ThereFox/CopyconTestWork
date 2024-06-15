@@ -1,3 +1,4 @@
+using System;
 using App.Services;
 using BookTest.Requests;
 using Domain.Entitys;
@@ -22,6 +23,25 @@ public class AuthorController : Controller
         var authors = await _service.GetAll();
 
         return View(authors);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetById([FromBody] string id)
+    {
+        if(Guid.TryParse(id, out var authourId) == false)
+        {
+            return BadRequest("Invalid Id");
+        }
+
+        var getAuthourResult = await _service.GetById(authourId);
+
+        if(getAuthourResult.IsFailure)
+        {
+            return BadRequest(getAuthourResult.Error);
+        }
+
+        return new JsonResult(getAuthourResult.Value);
+
     }
     
     [HttpPost]
